@@ -1,0 +1,14 @@
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\bin\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.exe
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\bin\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.deps.json
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\bin\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.runtimeconfig.json
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\bin\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.dll
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\bin\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.pdb
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\obj\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\obj\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.AssemblyInfoInputs.cache
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\obj\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.AssemblyInfo.cs
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\obj\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.csproj.CoreCompileInputs.cache
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\obj\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.dll
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\obj\Debug\net9.0\refint\DGD208-Spring2025-OmerAliTaylan.dll
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\obj\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.pdb
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\obj\Debug\net9.0\DGD208-Spring2025-OmerAliTaylan.genruntimeconfig.cache
+C:\Users\Ömer Ali\Desktop\DGD208-Spring2025-OmerAliTaylan\obj\Debug\net9.0\ref\DGD208-Spring2025-OmerAliTaylan.dll
