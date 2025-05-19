@@ -10,7 +10,6 @@ namespace DGD208_Spring2025_OmerAliTaylan.Models
         public event EventHandler PetDied;
 
         private readonly Dictionary<PetStat, int> _stats;
-        private readonly Dictionary<PetStat, int> _statDecreaseRates;
         private bool _isDead;
         
         public string Name { get; }
@@ -29,17 +28,6 @@ namespace DGD208_Spring2025_OmerAliTaylan.Models
                 { PetStat.Hunger, 50 },
                 { PetStat.Sleep, 50 },
                 { PetStat.Fun, 50 }
-            };
-            InitializeStatDecreaseRates();
-        }
-
-        private void InitializeStatDecreaseRates()
-        {
-            _statDecreaseRates = new Dictionary<PetStat, int>
-            {
-                { PetStat.Hunger, 1 },
-                { PetStat.Sleep, 1 },
-                { PetStat.Fun, 1 }
             };
         }
 
@@ -100,7 +88,7 @@ namespace DGD208_Spring2025_OmerAliTaylan.Models
 
             foreach (var stat in _stats.Keys)
             {
-                UpdateStat(stat, -_statDecreaseRates[stat]);
+                UpdateStat(stat, -1);
             }
         }
 

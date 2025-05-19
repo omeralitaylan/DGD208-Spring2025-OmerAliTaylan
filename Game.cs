@@ -13,7 +13,6 @@ namespace DGD208_Spring2025_OmerAliTaylan
         private bool _isRunning;
         private readonly Menu _mainMenu;
         private readonly PetManager _petManager;
-        private readonly SaveManager _saveManager;
         private readonly Menu _adoptionMenu;
         private readonly Menu _itemMenu;
 
@@ -21,7 +20,6 @@ namespace DGD208_Spring2025_OmerAliTaylan
         {
             _mainMenu = new Menu("Pet Simulator Main Menu");
             _petManager = new PetManager();
-            _saveManager = new SaveManager(_petManager);
             _adoptionMenu = new Menu("Pet Adoption Menu");
             _itemMenu = new Menu("Item Selection Menu");
             InitializeMenus();
@@ -33,7 +31,6 @@ namespace DGD208_Spring2025_OmerAliTaylan
             _mainMenu.AddMenuItem(2, "Adopt a Pet");
             _mainMenu.AddMenuItem(3, "View Pet Stats");
             _mainMenu.AddMenuItem(4, "Use Item");
-            _mainMenu.AddMenuItem(5, "Save Game");
             _mainMenu.AddMenuItem(0, "Exit Game");
 
             var petTypes = Enum.GetValues(typeof(PetType)).Cast<PetType>();
@@ -56,9 +53,6 @@ namespace DGD208_Spring2025_OmerAliTaylan
         {
             _isRunning = true;
             Console.WriteLine("Welcome to Pet Simulator!");
-            
-            // Load saved game data
-            _saveManager.LoadGame();
 
             while (_isRunning)
             {
@@ -73,7 +67,7 @@ namespace DGD208_Spring2025_OmerAliTaylan
                     Console.WriteLine("Invalid choice. Please try again.");
                 }
 
-                await Task.Delay(1000); // Small delay between actions
+                await Task.Delay(3000); // Wait 3 seconds between actions
                 _petManager.UpdateAllPetStats(); // Update pet stats each turn
             }
         }
@@ -84,7 +78,6 @@ namespace DGD208_Spring2025_OmerAliTaylan
             {
                 case 0:
                     _isRunning = false;
-                    _saveManager.SaveGame(); // Auto-save on exit
                     Console.WriteLine("Thank you for playing! Goodbye!");
                     break;
                 case 1:
@@ -98,10 +91,6 @@ namespace DGD208_Spring2025_OmerAliTaylan
                     break;
                 case 4:
                     await HandleItemUsage();
-                    break;
-                case 5:
-                    _saveManager.SaveGame();
-                    Console.WriteLine("Game saved successfully!");
                     break;
                 default:
                     Console.WriteLine("Invalid option.");
@@ -122,7 +111,6 @@ namespace DGD208_Spring2025_OmerAliTaylan
                     var petType = (PetType)(choice - 1);
                     var pet = _petManager.AdoptPet(name, petType);
                     Console.WriteLine($"Congratulations! You've adopted a {petType} named {name}!");
-                    Console.WriteLine($"Your pet's personality is: {pet.Personality}");
                 }
                 else
                 {
@@ -140,7 +128,7 @@ namespace DGD208_Spring2025_OmerAliTaylan
                 Console.WriteLine("\nYour Pets:");
                 foreach (var pet in pets)
                 {
-                    Console.WriteLine($"\n{pet.Name} the {pet.Type} ({pet.Personality}):");
+                    Console.WriteLine($"\n{pet.Name} the {pet.Type}:");
                     Console.WriteLine($"Hunger: {pet.GetStat(PetStat.Hunger)}");
                     Console.WriteLine($"Sleep: {pet.GetStat(PetStat.Sleep)}");
                     Console.WriteLine($"Fun: {pet.GetStat(PetStat.Fun)}");
@@ -184,7 +172,7 @@ namespace DGD208_Spring2025_OmerAliTaylan
                     Console.WriteLine("\nSelect a pet:");
                     for (int i = 0; i < pets.Count; i++)
                     {
-                        Console.WriteLine($"{i + 1}. {pets[i].Name} the {pets[i].Type} ({pets[i].Personality})");
+                        Console.WriteLine($"{i + 1}. {pets[i].Name} the {pets[i].Type}");
                     }
 
                     Console.Write("\nSelect a pet number: ");
@@ -192,12 +180,10 @@ namespace DGD208_Spring2025_OmerAliTaylan
                         petChoice > 0 && petChoice <= pets.Count)
                     {
                         var selectedPet = pets[petChoice - 1];
-                        _petManager.UseItem(selectedItem, selectedPet);
-                        Console.WriteLine($"Used {selectedItem.Name} on {selectedPet.Name}!");
+                        await _petManager.UseItemAsync(selectedItem, selectedPet);
                     }
                 }
             }
-            await Task.CompletedTask;
         }
 
         private void DisplayCreatorInfo()
