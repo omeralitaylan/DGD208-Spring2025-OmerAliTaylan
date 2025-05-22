@@ -15,6 +15,8 @@ namespace DGD208_Spring2025_OmerAliTaylan
         private readonly PetManager _petManager;
         private readonly Menu _adoptionMenu;
         private readonly Menu _itemMenu;
+        private readonly TrainingManager _trainingManager;
+        private readonly Menu _trainingMenu;
 
         public Game()
         {
@@ -22,6 +24,8 @@ namespace DGD208_Spring2025_OmerAliTaylan
             _petManager = new PetManager();
             _adoptionMenu = new Menu("Pet Adoption Menu");
             _itemMenu = new Menu("Item Selection Menu");
+            _trainingManager = new TrainingManager();
+            _trainingMenu = new Menu("Training Menu");
             InitializeMenus();
         }
 
@@ -31,6 +35,7 @@ namespace DGD208_Spring2025_OmerAliTaylan
             _mainMenu.AddMenuItem(2, "Adopt a Pet");
             _mainMenu.AddMenuItem(3, "View Pet Stats");
             _mainMenu.AddMenuItem(4, "Use Item");
+            _mainMenu.AddMenuItem(5, "Train Pet");
             _mainMenu.AddMenuItem(0, "Exit Game");
 
             var petTypes = Enum.GetValues(typeof(PetType)).Cast<PetType>();
@@ -91,6 +96,9 @@ namespace DGD208_Spring2025_OmerAliTaylan
                     break;
                 case 4:
                     await HandleItemUsage();
+                    break;
+                case 5:
+                    await HandlePetTraining();
                     break;
                 default:
                     Console.WriteLine("Invalid option.");
@@ -194,6 +202,55 @@ namespace DGD208_Spring2025_OmerAliTaylan
             Console.WriteLine("Student Number: [Your Student Number]");
             Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
+        }
+
+        private async Task HandlePetTraining()
+        {
+            var pets = _petManager.GetAllPets().ToList();
+            if (!pets.Any())
+            {
+                Console.WriteLine("You need to adopt a pet first!");
+                return;
+            }
+
+            Console.WriteLine("\nSelect a pet to train:");
+            for (int i = 0; i < pets.Count; i++)
+            {
+                var pet = pets[i];
+                var progress = _trainingManager.GetTrainingProgress(pet);
+                Console.WriteLine($"{i + 1}. {pet.Name} the {pet.Type} (Training Progress: {progress}%)");
+            }
+
+            Console.Write("\nSelect a pet number: ");
+            if (int.TryParse(Console.ReadLine(), out int petChoice) && 
+                petChoice > 0 && petChoice <= pets.Count)
+            {
+                var selectedPet = pets[petChoice - 1];
+                var activities = _trainingManager.GetAvailableActivities(selectedPet).ToList();
+
+                if (!activities.Any())
+                {
+                    Console.WriteLine("No training activities available for this pet type.");
+                    return;
+                }
+
+                Console.WriteLine("\nAvailable Training Activities:");
+                for (int i = 0; i < activities.Count; i++)
+                {
+                    var activity = activities[i];
+                    Console.WriteLine($"{i + 1}. {activity.Name} - {activity.Description}");
+                    Console.WriteLine($"   Duration: {activity.Duration} seconds");
+                    Console.WriteLine($"   Affects: {string.Join(", ", activity.AffectedStats)}");
+                }
+
+                Console.Write("\nSelect an activity number: ");
+                if (int.TryParse(Console.ReadLine(), out int activityChoice) && 
+                    activityChoice > 0 && activityChoice <= activities.Count)
+                {
+                    var selectedActivity = activities[activityChoice - 1];
+                    await _trainingManager.TrainPetAsync(selectedPet, selectedActivity);
+                }
+            }
         }
     }
 } 
