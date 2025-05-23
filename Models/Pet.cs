@@ -11,11 +11,13 @@ namespace DGD208_Spring2025_OmerAliTaylan.Models
 
         private readonly Dictionary<PetStat, int> _stats;
         private bool _isDead;
+        private readonly PetStatusEffect _statusEffect;
         
         public string Name { get; }
         public PetType Type { get; }
         public string Personality { get; }
         public bool IsDead => _isDead;
+        public PetStatus CurrentStatus => _statusEffect.CurrentStatus;
         
         public Pet(string name, PetType type)
         {
@@ -29,6 +31,8 @@ namespace DGD208_Spring2025_OmerAliTaylan.Models
                 { PetStat.Sleep, 50 },
                 { PetStat.Fun, 50 }
             };
+            _statusEffect = new PetStatusEffect(this);
+            _statusEffect.StatusChanged += OnStatusChanged;
         }
 
         private string GeneratePersonality()
@@ -102,16 +106,23 @@ namespace DGD208_Spring2025_OmerAliTaylan.Models
             PetDied?.Invoke(this, EventArgs.Empty);
         }
 
+        private void OnStatusChanged(object sender, PetStatusEventArgs e)
+        {
+            Console.WriteLine($"{Name}'s status changed from {e.OldStatus} to {e.NewStatus}");
+        }
+
         public Dictionary<string, object> ToSaveData()
         {
-            return new Dictionary<string, object>
+            var data = new Dictionary<string, object>
             {
                 { "Name", Name },
                 { "Type", Type.ToString() },
                 { "Personality", Personality },
                 { "Stats", _stats.ToDictionary(k => k.Key.ToString(), v => v.Value) },
-                { "IsDead", _isDead }
+                { "IsDead", _isDead },
+                { "CurrentStatus", CurrentStatus.ToString() }
             };
+            return data;
         }
 
         public static Pet FromSaveData(Dictionary<string, object> data)
