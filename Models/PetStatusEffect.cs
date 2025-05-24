@@ -1,5 +1,6 @@
 using System;
 using DGD208_Spring2025_OmerAliTaylan.Enums;
+using DGD208_Spring2025_OmerAliTaylan.UI;
 
 namespace DGD208_Spring2025_OmerAliTaylan.Models
 {
@@ -9,13 +10,16 @@ namespace DGD208_Spring2025_OmerAliTaylan.Models
 
         private PetStatus _currentStatus;
         private readonly Pet _pet;
+        private int _statusDuration;
 
         public PetStatus CurrentStatus => _currentStatus;
+        public int StatusDuration => _statusDuration;
 
         public PetStatusEffect(Pet pet)
         {
             _pet = pet;
             _currentStatus = PetStatus.Normal;
+            _statusDuration = 0;
             _pet.StatChanged += OnPetStatChanged;
         }
 
@@ -35,7 +39,37 @@ namespace DGD208_Spring2025_OmerAliTaylan.Models
 
             if (oldStatus != _currentStatus)
             {
+                _statusDuration = 0;
                 OnStatusChanged(new PetStatusEventArgs(oldStatus, _currentStatus));
+                ApplyStatusEffects();
+            }
+            else
+            {
+                _statusDuration++;
+            }
+        }
+
+        private void ApplyStatusEffects()
+        {
+            switch (_currentStatus)
+            {
+                case PetStatus.Happy:
+                    // Happy pets recover stats slightly faster
+                    _pet.UpdateStat(PetStat.Hunger, 1);
+                    _pet.UpdateStat(PetStat.Sleep, 1);
+                    _pet.UpdateStat(PetStat.Fun, 1);
+                    break;
+                case PetStatus.Sick:
+                    // Sick pets lose stats faster
+                    _pet.UpdateStat(PetStat.Hunger, -2);
+                    _pet.UpdateStat(PetStat.Sleep, -2);
+                    _pet.UpdateStat(PetStat.Fun, -2);
+                    break;
+                case PetStatus.Excited:
+                    // Excited pets use more energy
+                    _pet.UpdateStat(PetStat.Hunger, -1);
+                    _pet.UpdateStat(PetStat.Sleep, -1);
+                    break;
             }
         }
 
@@ -52,6 +86,12 @@ namespace DGD208_Spring2025_OmerAliTaylan.Models
 
         protected virtual void OnStatusChanged(PetStatusEventArgs e)
         {
+            StatusDisplay.DisplayStatus(_pet.Name, _currentStatus, 
+                _pet.GetStat(PetStat.Hunger),
+                _pet.GetStat(PetStat.Sleep),
+                _pet.GetStat(PetStat.Fun));
+            
+            Console.WriteLine(StatusDisplay.GetStatusMessage(_currentStatus, _pet.Name));
             StatusChanged?.Invoke(this, e);
         }
     }
